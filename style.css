@@ -1,0 +1,241 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden; /* 禁止滚动 */
+    background: #111;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* 背景淡入淡出轮播容器 */
+.bg-slider {
+    position: fixed;
+    inset: 0;
+    z-index: -2;
+    overflow: hidden;
+}
+.bg-slider img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transition: opacity 1.8s ease-in-out;
+}
+.bg-slider img.active {
+    opacity: 1;
+}
+
+/* 黑金遮罩 */
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(128,96,17,0.4), rgba(17,17,17,0.7));
+    z-index: -1;
+}
+
+/* ✅ 金色边框固定 */
+.page-wrapper {
+    position: fixed;
+    top: 5px;
+    bottom: 5px;
+    left: 5px;
+    right: 5px;
+    border: 3px solid gold;
+    border-radius: 12px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom) 10px;
+    animation: glowBorder 3s infinite alternate;
+    overflow: hidden;
+}
+
+/* 呼吸光效 */
+@keyframes glowBorder {
+    0%   { box-shadow: 0 0 15px rgba(255,215,0,0.3); }
+    100% { box-shadow: 0 0 35px rgba(255,215,0,0.8); }
+}
+
+/* 页面内容 */
+.page-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    text-align: center;
+    transform-origin: center;
+    transition: transform 0.3s ease;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+/* ✅ 缩放逻辑：小屏适配 */
+@media (max-height: 700px) {
+    .page-content { transform: scale(0.95); }
+}
+@media (max-height: 600px) {
+    .page-content { transform: scale(0.9); }
+}
+@media (max-height: 500px) {
+    .page-content { transform: scale(0.85); }
+}
+
+/* 顶部行 */
+.top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #222;
+    border-radius: 10px;
+}
+.logo {
+    height: 40px;
+    object-fit: contain;
+}
+#searchInput {
+    flex: 1;
+    max-width: 500px;
+    padding: 0.5rem 1rem;
+    background-color: #111;
+    border: 1px solid #FFD700;
+    border-radius: 8px;
+    color: white;
+}
+
+.no-result {
+  display: none;
+  text-align: center;
+  color: red;  /* ✅ 这里是提示文字的颜色 */
+  background: #1a1a1a;
+  padding: 8px;
+  margin: 4px 0;
+  font-size: 14px;
+  border-radius: 8px;
+}
+
+.social-icons {
+    display: flex;
+    gap: 0.8rem;
+}
+.social-icons a {
+    color: #FFD700;
+    font-size: 1.3rem;
+    transition: 0.3s;
+}
+.social-icons a:hover {
+    text-shadow: 0 0 12px gold;
+}
+
+/* 主体区域：城市网格 */
+.main-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    padding: 1rem;
+    overflow: hidden;
+}
+.city-grid {
+    display: grid;
+    gap: 0.8rem;
+    flex: 1;
+    height: 100%;
+    grid-auto-rows: 1fr; /* ✅ 每行均分高度 */
+}
+
+/* ✅ 桌面端 */
+@media (min-width: 768px) {
+    .city-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: repeat(4, 1fr);
+    }
+}
+/* ✅ 移动端 */
+@media (max-width: 767px) {
+    .city-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(3, 1fr);
+    }
+}
+
+/* 城市卡片修复塌陷问题 */
+.city-card {
+    background-color: #222;
+    border: 1px solid #FFD700;
+    border-radius: 12px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 1 / 1; /* ✅ 防止塌陷，保持方形 */
+    min-height: 100px;   /* ✅ 最小高度 */
+}
+.city-card:hover {
+    transform: scale(1.08); /* ✅ 悬浮时放大 */
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.8),
+                0 0 30px rgba(255, 215, 0, 0.5); /* ✅ 金色发光 */
+}
+
+.city-name {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.6);
+    color: #FFD700;
+    font-weight: bold;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-size: 1rem;
+    white-space: nowrap;
+}
+.city-tagline {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(0,0,0,0.6);
+    color: white;
+    font-size: 0.85rem;
+    padding: 3px 8px;
+    border-radius: 6px;
+}
+
+/* 分页按钮 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 10px;
+    background-color: #111;
+}
+.pagination button {
+    background-color: #FFD700;
+    color: #111;
+    font-weight: bold;
+    padding: 0.5rem 1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.pagination button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+/* ✅ PC 端边框宽度限制 */
+@media (min-width: 1024px) {
+    .page-wrapper {
+        max-width: 1200px; /* ✅ 调整为你想要的最大宽度 */
+        left: 50%;
+        transform: translateX(-50%); /* ✅ 保证水平居中 */
+    }
+}
